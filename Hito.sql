@@ -1,0 +1,92 @@
+DROP DATABASE Hito_individual;
+CREATE DATABASE Hito_individual;
+USE Hito_individual;
+
+CREATE TABLE calle(
+	nombre varchar(40),
+    idCalle INT PRIMARY KEY
+);
+CREATE TABLE barrio(
+	nombre varchar(40),
+    idBarrio INT PRIMARY KEY
+);
+CREATE TABLE Estacion_Metro(
+	nombre varchar(40),
+    idEstacion INT PRIMARY KEY,
+    color VARCHAR(20)
+);
+CREATE TABLE Punto_Interes(
+	idInteres INT PRIMARY KEY,
+    nombre varchar(50)
+);
+CREATE TABLE Linea_Metro(
+	idLineaMetro INT PRIMARY KEY,
+    nombre varchar(50),
+    salidas INT
+);
+CREATE TABLE Parada_bus(
+	idParadas INT PRIMARY KEY
+);
+CREATE TABLE Linea_bus(
+	idLineaBus INT PRIMARY KEY,
+    nombre varchar(50)
+);
+CREATE TABLE TRAMO (
+	idTramo INT PRIMARY KEY,
+    idCalle INT,
+    idBarrio INT,
+    idParadas INT,
+    idEstacion INT,
+    idInteres INT,
+    foreign key (idCalle) references calle(idCalle),
+    foreign key (idBarrio) references barrio(idBarrio),
+    foreign key (idParadas) references parada_bus(idParadas),
+    foreign key (idEstacion) references estacion_metro(idEstacion),
+    foreign key (idInteres) references punto_interes(idInteres)
+);
+
+
+INSERT INTO CALLE VALUES ("Calle de España",53);
+INSERT INTO CALLE VALUES ("Calle de Escuador",83);
+INSERT INTO CALLE VALUES ("Calle de Andorra",33);
+INSERT INTO CALLE VALUES ("Calle de Francia",66);
+
+INSERT INTO BARRIO VALUES ("Barrio Azul",72);
+INSERT INTO BARRIO VALUES ("Barrio Rojo",77);
+INSERT INTO BARRIO VALUES ("Barrio Amarillo",49);
+
+INSERT INTO PARADA_BUS VALUES (6);
+INSERT INTO PARADA_BUS VALUES (2);
+INSERT INTO PARADA_BUS VALUES (15);
+
+INSERT INTO ESTACION_METRO VALUES ("Estación de los Dientes de León",7,"Azul");
+INSERT INTO ESTACION_METRO VALUES ("Estación de las Rosas",4,"Rojo");
+
+INSERT INTO PUNTO_INTERES VALUES (25, "Parque de los patos");
+INSERT INTO PUNTO_INTERES VALUES (26, "Museo de las artes");
+INSERT INTO PUNTO_INTERES VALUES (27, "Catedral");
+
+INSERT INTO LINEA_METRO VALUES (1,"Línea 1 de metro", 3);
+INSERT INTO LINEA_METRO VALUES (2,"Línea 2 de metro", 1);
+INSERT INTO LINEA_METRO VALUES (3,"Línea 3 de metro", 5);
+
+INSERT INTO LINEA_BUS VALUES(1,"Línea 1 de bus");
+INSERT INTO LINEA_BUS VALUES(2,"Línea 2 de bus");
+
+INSERT INTO TRAMO VALUES (335,53,72,6,7,25);
+INSERT INTO TRAMO VALUES (381,66,72,2,7,27);
+INSERT INTO TRAMO VALUES (223,83,77,2,4,26);
+INSERT INTO TRAMO VALUES (330,53,72,6,7,25);
+INSERT INTO TRAMO VALUES (128,33,49,15,NULL,NULL);
+INSERT INTO TRAMO VALUES (125,33,49,NULL,NULL,NULL);
+
+SELECT * FROM TRAMO WHERE IDTRAMO >300;
+SELECT IDBARRIO,IDTRAMO FROM TRAMO INNER JOIN CALLE ON TRAMO.IDCALLE = CALLE.IDCALLE;
+SELECT * FROM TRAMO WHERE IDBARRIO = 72 AND IDINTERES = 27;
+SELECT IDCALLE, IDTRAMO, IDPARADAS FROM TRAMO INNER JOIN BARRIO ON TRAMO.IDBARRIO = BARRIO.IDBARRIO;
+SELECT * FROM TRAMO WHERE IDPARADAS = 2;
+SELECT * FROM TRAMO WHERE IDBARRIO !=77;
+SELECT * FROM TRAMO ORDER BY IDBARRIO DESC;
+SELECT COUNT(IDBARRIO) FROM TRAMO;
+SELECT * FROM TRAMO WHERE IDESTACION != 7 OR IDBARRIO=49;
+SELECT IDTRAMO FROM TRAMO WHERE IDESTACION IS NULL OR IDPARADAS IS NULL;
